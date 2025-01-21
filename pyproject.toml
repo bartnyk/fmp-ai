@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "ai-engine"
+version = "0.1.0"
+description = ""
+authors = ["bartnyk <kuba.bartnik114@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.12,<3.13"
+fmp-core = "^1.0.0"
+ruff = "^0.9.1"
+isort = "^5.13.2"
+pandas = "^2.2.3"
+scikit-learn = "^1.6.1"
+typer = "^0.15.1"
+keras = "^3.8.0"
+tensorflow = {extras = ["and-cuda"], version = "^2.18.0"}
+websockets = "^14.2"
+apscheduler = "^3.11.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
