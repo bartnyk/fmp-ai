@@ -114,6 +114,7 @@ class BaseForexPredictor:
         model.create_base_model(input_dim, output_dim)
         return model.train(X_data, y_data)
 
+
 class ShortTermForexPredictor(BaseForexPredictor):
     def __init__(self, time_window=30):
         """
@@ -242,48 +243,3 @@ class DailyForexPredictor(BaseForexPredictor):
                     y_changes.append(list(changes.values()))
 
         return np.array(X_features), np.array(y_changes)
-
-
-def train_models(events_df, forex_df):
-    """
-    Trenuje oba modele.
-
-    Args:
-        events_df (pd.DataFrame): DataFrame z wydarzeniami
-        forex_df_30min (pd.DataFrame): DataFrame z 30-minutowymi danymi forex
-        forex_df_daily (pd.DataFrame): DataFrame z dziennymi danymi forex
-
-    Returns:
-        tuple: (model_short_term, model_daily) - wytrenowane modele
-    """
-    short_term_model = ShortTermForexPredictor(time_window=30)
-    X_short, y_short = short_term_model.prepare_data(events_df, forex_df)
-
-    input_dim = X_short.shape[1]
-    output_dim = y_short.shape[1]
-    short_term_model.model = short_term_model.create_base_model(input_dim, output_dim)
-    short_term_history = short_term_model.train(X_short, y_short)
-
-    # Model dzienny
-    daily_model = DailyForexPredictor()
-    X_daily, y_daily = daily_model.prepare_data(events_df, forex_df)
-
-    input_dim = X_daily.shape[1]
-    output_dim = y_daily.shape[1]
-    daily_model.model = daily_model.create_base_model(input_dim, output_dim)
-    daily_history = daily_model.train(X_daily, y_daily)
-
-    return short_term_model, daily_model
-
-
-# Przykład użycia:
-if __name__ == "__main__":
-    # Wczytanie danych
-    events_df = pd.read_csv("events.csv")
-    forex_df_30min = pd.read_csv("forex_30min.csv")
-    forex_df_daily = pd.read_csv("forex_daily.csv")
-
-    # Trenowanie modeli
-    model_short_term, model_daily = train_models(
-        events_df, forex_df_30min, forex_df_daily
-    )
